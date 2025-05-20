@@ -4,6 +4,7 @@ pragma solidity 0.8.19;
 // AutomationCompatible.sol imports the functions from both ./AutomationBase.sol and
 // ./interfaces/AutomationCompatibleInterface.sol
 import {AutomationCompatibleInterface} from "@chainlink/contracts/src/v0.8/automation/AutomationCompatible.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
  * @dev Example contract, use the Forwarder as needed for additional security.
@@ -17,11 +18,12 @@ import {AutomationCompatibleInterface} from "@chainlink/contracts/src/v0.8/autom
  * DO NOT USE THIS CODE IN PRODUCTION.
  */
 
-contract Counter is AutomationCompatibleInterface {
+contract Counter is AutomationCompatibleInterface, Ownable {
     /**
      * Public counter variable
      */
     uint256 public counter;
+    bool    public isCounterEnabled;
 
     /**
      * Use an interval in seconds and a timestamp to slow execution of Upkeep
@@ -44,8 +46,12 @@ contract Counter is AutomationCompatibleInterface {
         override
         returns (bool upkeepNeeded, bytes memory /* performData */)
     {
-        upkeepNeeded = (block.timestamp - lastTimeStamp) > interval;
+        upkeepNeeded = (block.timestamp - lastTimeStamp) > interval && isCounterEnabled;
         // We don't use the checkData in this example. The checkData is defined when the Upkeep was registered.
+    }
+
+    function toggleCounterEnabled() external onlyOwner {
+        isCounterEnabled = !isCounterEnabled;
     }
 
     function performUpkeep(bytes calldata /* performData */) external override {
