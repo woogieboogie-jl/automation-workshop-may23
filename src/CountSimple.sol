@@ -2,15 +2,14 @@
 pragma solidity ^0.8.19;
 
 contract CountSimple {
-  event CountedBy(address indexed msgSender);
+    event CountedBy(address indexed msgSender);
 
-  uint256 public counted = 0;
+    uint256 public counted = 0;
 
-  constructor() {}
+    constructor() {}
 
-  function performUpkeep() external {
-    counted += 1;
-    emit CountedBy(msg.sender);
-  }
+    function performUpkeep() external {
+        counted += 1;
+        emit CountedBy(msg.sender);
+    }
 }
-

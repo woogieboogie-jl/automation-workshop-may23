@@ -10,4 +10,3 @@ contract CountEmitLog {
         emit WantsToCount(msg.sender);
     }
 }
-

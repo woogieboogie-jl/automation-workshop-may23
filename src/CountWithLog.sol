@@ -13,10 +13,9 @@ struct Log {
 }
 
 interface ILogAutomation {
-    function checkLog(
-        Log calldata log,
-        bytes memory checkData
-    ) external returns (bool upkeepNeeded, bytes memory performData);
+    function checkLog(Log calldata log, bytes memory checkData)
+        external
+        returns (bool upkeepNeeded, bytes memory performData);
 
     function performUpkeep(bytes calldata performData) external;
 }
@@ -28,10 +27,11 @@ contract CountWithLog is ILogAutomation {
 
     constructor() {}
 
-    function checkLog(
-        Log calldata log,
-        bytes memory
-    ) external pure returns (bool upkeepNeeded, bytes memory performData) {
+    function checkLog(Log calldata log, bytes memory)
+        external
+        pure
+        returns (bool upkeepNeeded, bytes memory performData)
+    {
         upkeepNeeded = true;
         address logSender = bytes32ToAddress(log.topics[1]);
         performData = abi.encode(logSender);
@@ -47,4 +47,3 @@ contract CountWithLog is ILogAutomation {
         return address(uint160(uint256(_address)));
     }
 }
-
